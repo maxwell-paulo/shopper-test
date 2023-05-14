@@ -15,6 +15,19 @@ const productRepository = {
         });
 
         return product;
+    },
+
+    async updateProduct(code, name, cost_price, sales_price) {
+      const updatedProduct = await Product.update(
+        {
+          name,
+          cost_price,
+          sales_price
+        },
+        { where: { code }, }
+      );
+
+      return updatedProduct;
     }
 }
 
