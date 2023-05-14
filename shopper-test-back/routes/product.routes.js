@@ -15,35 +15,6 @@ productRouter.get("/:code", getOneProductController.handle);
 
 // update product
 productRouter.put("/:code", updateProductController.handle)
-  // try {
-
-  //   //Req Rules
-  //   const product = await Product.findOne({ where: { code: req.params.code } })
-
-
-  //   // the new sales_price must be greater than the product cost_price.
-  //   if (parseFloat(req.body.sales_price) <= parseFloat(product.cost_price)) {
-  //     return res.status(400).json({ error: "O preço de venda deve ser maior que o preço de custo." });
-  //   }
-
-  //   // the new sales_price must be 10% greater or less than the current sales_price
-  //   const newSalesPrice = parseFloat(req.body.sales_price);
-  //   const currentSalesPrice = parseFloat(product.sales_price);
-  //   const tenPercentIncrease = parseFloat((currentSalesPrice * 1.1).toFixed(2));
-  //   const tenPercentDecrease = parseFloat((currentSalesPrice * 0.9).toFixed(2))
-
-  //   if (newSalesPrice > tenPercentIncrease || newSalesPrice < tenPercentDecrease) {
-  //     return res.status(400).json({ error: "O preço de venda novo deve ser 10% maior ou menor que o preço de venda antigo" })
-  //   }
-
-  //   const updatedProduct = await Product.update(
-  //     {
-  //       name: req.body.name,
-  //       cost_price: req.body.cost_price,
-  //       sales_price: req.body.sales_price
-  //     },
-  //     { where: { code: req.params.code }, }
-  //   );
 
   //   // If the product is in a pack, change the pack price
   //   const allProducts = await Product.findAll()
