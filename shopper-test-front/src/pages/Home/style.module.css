@@ -41,3 +41,19 @@ background-color: lightgray;
   justify-content: center;
   gap: 10px;
 }
+
+.tagH1 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+
+.tagLabel {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+}
+
+.tagP{
+  margin-top: 0;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+}
