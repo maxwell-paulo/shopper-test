@@ -1,12 +1,13 @@
 import { productRepository } from "../../repository/product.repository.js";
+import { packRepository } from "../../repository/pack.repository.js";
 import { ApiError } from "../../utils/ApiError.js";
 import {HTTP_STATUS_CODES} from "../../utils/const.js";
 
-const updateProductService = {
-    async execute(code, name, cost_price, sales_price) {
-            const repository = productRepository;
 
-            const product = await repository.getOneProduct(code)
+const updateProductService = {
+    async execute(code, sales_price) {
+
+            const product = await productRepository.getOneProduct(code)
 
             // the new sales_price must be greater than the product cost_price.
             if (parseFloat(sales_price) <= parseFloat(product.cost_price)) {
@@ -24,10 +25,18 @@ const updateProductService = {
               throw new ApiError(`O preço de venda novo deve ser 10% maior ou menor que o preço de venda antigo que é de R$${product.sales_price}`, HTTP_STATUS_CODES.badRequest)
             }
 
-            //update Product sales_price
-            const updatedProduct = await repository.updateProduct(code, name, cost_price, sales_price)
+            //update Products sales_price
 
-            return updatedProduct;
+            // If the Product is in a pack, update the pack sales_price
+            const packs = await packRepository.getPacksByProductId(code)
+            const packsProducts = packs.map((pack) => ({code: pack.pack_id.toString(), sales_price: (pack.qty * sales_price).toString()}))
+            const products = [{code, sales_price}, ...packsProducts]
+            console.log(products)
+            const porductsUpdates = products.map((product) => productRepository.updateProduct(product.code, product.sales_price))
+
+            const updatedProducts = await Promise.all(porductsUpdates)
+
+            return updatedProducts;
     }
 }
 

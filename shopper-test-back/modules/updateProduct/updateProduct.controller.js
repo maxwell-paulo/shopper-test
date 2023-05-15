@@ -3,9 +3,9 @@ import { updateProductService } from "./updateProduct.service.js";
 const updateProductController = {
     async handle(req, res) {
         const { code } = req.params;
-        const { name, cost_price, sales_price } = req.body;
+        const { sales_price } = req.body;
 try {
-  const updateProduct = await updateProductService.execute(code, name, cost_price, sales_price);
+  const updateProduct = await updateProductService.execute(code, sales_price);
 
   return res.json(updateProduct);
 } catch(error) {

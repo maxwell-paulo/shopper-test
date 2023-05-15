@@ -13,7 +13,7 @@ const Pack = sequelize.define("pack", {
   },
   product_id: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
   qty: {
     type: Sequelize.INTEGER,

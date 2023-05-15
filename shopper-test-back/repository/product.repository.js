@@ -1,7 +1,7 @@
 import Product from "../model/product.model.js"
 
-const productRepository = {
-    async getAllProducts() {
+const productRepository= {
+    getAllProducts: async () => {
         const products = await Product.findAll()
 
         return products;
@@ -17,18 +17,15 @@ const productRepository = {
         return product;
     },
 
-    async updateProduct(code, name, cost_price, sales_price) {
+    async updateProduct(code, sales_price) {
       const updatedProduct = await Product.update(
-        {
-          name,
-          cost_price,
-          sales_price
-        },
+        {sales_price},
         { where: { code }, }
       );
 
       return updatedProduct;
     }
+
 }
 
 export { productRepository };
