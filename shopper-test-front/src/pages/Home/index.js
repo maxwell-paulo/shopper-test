@@ -1,9 +1,9 @@
 import style from "./style.module.css";
-// import { Products } from "../../components/Products";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../api/api.js";
 import toast from "react-hot-toast";
+import Papa from "papaparse";
 
 export function Home() {
   const navigate = useNavigate();
@@ -15,27 +15,31 @@ export function Home() {
 
   const [camposPreenchidos, setCamposPreenchidos] = useState(false);
 
-  const [product, setProduct] = useState([]);
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const response = await api.get("");
-        setProduct([...response.data]);
-      } catch (err) {
-        console.log(err);
-      }
-    }
+    Papa.parse(file, {
+      complete: (result) => {
+        const csvData = result.data;
+        if (csvData.length > 1) {
+          const [headerRow, dataRow] = csvData;
+          const [productCode, newPrice] = dataRow;
+          setForm({ code: productCode, sales_price: newPrice });
+          setCamposPreenchidos(true);
+        }
+      },
+      header: false,
+      skipEmptyLines: true
+    });
+  };
 
-    fetchProducts();
-    setCamposPreenchidos(form.code.length > 0 && form.sales_price.length > 0);
-  }, [form.code, form.sales_price]);
-
-  function handleChange(e) {
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-  }
+    setCamposPreenchidos(form.code !== "" && form.sales_price !== "");
+  };
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const floatValue = parseFloat(form.sales_price);
@@ -51,16 +55,17 @@ export function Home() {
     } catch (err) {
       toast.error(err.response?.data);
     }
-  }
+  };
 
   return (
     <div className={style.container}>
       <div className={style.content}>
-        <h1>Atualizar preço do produto</h1>
+        <h1 className={style.tagH1}>Atualizar preço do produto</h1>
+        <p className={style.tagP}>Atualize o preço importando um aquivo CSV ou manualmente preenchendo os campo</p>
         <form onSubmit={handleSubmit} className={style.form}>
           <div className={style.formFields}>
             <div className={style.input}>
-              <label htmlFor="codigo">Código do produto:</label>
+              <label className={style.tagLabel} htmlFor="codigo">Código do produto:</label>
               <input
                 required
                 id="codigo"
@@ -72,7 +77,7 @@ export function Home() {
               />
             </div>
             <div className={style.input}>
-              <label htmlFor="preco">Novo preço do produto:</label>
+              <label className={style.tagLabel} htmlFor="preco">Novo preço do produto:</label>
               <input
                 required
                 id="preco"
@@ -82,21 +87,22 @@ export function Home() {
                 onChange={handleChange}
               />
             </div>
+            <div className={style.input}>
+              <label className={style.tagLabel} htmlFor="csv">Arquivo CSV:</label>
+              <input
+                id="csv"
+                name="csv"
+                type="file"
+                accept=".csv"
+                onChange={handleFileChange}
+              />
+            </div>
           </div>
           <button type="submit" disabled={!camposPreenchidos}>
             Atualizar produto
           </button>
         </form>
       </div>
-      {/* {product.map((currentProduct) => (
-          <Products
-            key={currentProduct.code}
-            code={currentProduct.code}
-            name={currentProduct.name}
-            cost_price={currentProduct.cost_price}
-            sales_price={currentProduct.sales_price}
-          />
-        ))} */}
     </div>
   );
 }

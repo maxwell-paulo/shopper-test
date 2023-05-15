@@ -29,22 +29,22 @@ export function Product() {
   return (
     <div className={style.container}>
     <div className={style.content}>
-      <h1>{product.name}</h1>
+      <h1 className={style.tagH1}>{product.name}</h1>
       <div className={style.table}>
       <div className={style.tableFields}>
-      <p>Código</p>
+      <p className={style.tagP}>Código</p>
       <p>{product.code}</p>
       </div>
       <div className={style.tableFields}>
-      <p>Preço de custo</p>
-      <p>R${product.cost_price}</p>
+      <p className={style.tagP}>Preço de custo</p>
+      <p className={style.tagP}>R${product.cost_price}</p>
       </div>
       <div className={style.tableFields}>
-      <p>Preço de venda</p>
-      <p>R${product.sales_price}</p>
+      <p className={style.tagP}>Preço de venda</p>
+      <p className={style.tagP}>R${product.sales_price}</p>
       </div>
       </div>
-      <button type="button" onClick={handleButtonClick}>Ir para a página inicial</button>
+      <button className={style.tagButton} type="button" onClick={handleButtonClick}>Ir para a página inicial</button>
       </div>
     </div>
   );
