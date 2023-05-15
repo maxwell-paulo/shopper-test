@@ -10,7 +10,7 @@ const updateProductService = {
 
             // the new sales_price must be greater than the product cost_price.
             if (parseFloat(sales_price) <= parseFloat(product.cost_price)) {
-              throw new Error("Erro test", HTTP_STATUS_CODES.badRequest)
+              throw new ApiError(`o preço de venda deve ser maior que o preço de custo que é de R$${product.cost_price}`, HTTP_STATUS_CODES.badRequest)
             }
 
 
@@ -21,20 +21,11 @@ const updateProductService = {
             const tenPercentDecrease = parseFloat((currentSalesPrice * 0.9).toFixed(2))
 
             if (newSalesPrice > tenPercentIncrease || newSalesPrice < tenPercentDecrease) {
-              return { error: "O preço de venda novo deve ser 10% maior ou menor que o preço de venda antigo",
-              status: 404
-              }
+              throw new ApiError(`O preço de venda novo deve ser 10% maior ou menor que o preço de venda antigo que é de R$${product.sales_price}`, HTTP_STATUS_CODES.badRequest)
             }
 
             //update Product sales_price
-            const updatedProduct = await repository.updateProduct(code, name, cost_price, sales_price);
-
-            if (!updatedProduct) {
-                return {
-                    error: 'Produto não encontrado',
-                    status: 404
-                };
-            }
+            const updatedProduct = await repository.updateProduct(code, name, cost_price, sales_price)
 
             return updatedProduct;
     }
