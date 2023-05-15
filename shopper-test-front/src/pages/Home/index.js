@@ -1,3 +1,4 @@
+import style from "./style.module.css";
 import { useState, useEffect } from "react";
 import { api } from "../../api/api.js";
 import toast from "react-hot-toast";
@@ -30,14 +31,17 @@ export function Home() {
     try {
       await api.put(`${form.code}`, form);
     } catch (err) {
-      toast.error(err.response.data);
+      toast.error(err.response?.data);
     }
   }
 
   return (
-    <div>
-      <h1>Atualizar o preço do produto:</h1>
-      <form onSubmit={handleSubmit}>
+    <div className={style.container}>
+    <div className={style.content}>
+      <h1>Atualizar preço do produto</h1>
+      <form onSubmit={handleSubmit} className={style.form}>
+      <div className={style.formFields}>
+      <div className={style.input}>
         <label htmlFor="codigo">Código do produto:</label>
         <input
           required
@@ -48,6 +52,8 @@ export function Home() {
           value={form.code}
           onChange={handleChange}
         />
+        </div>
+        <div className={style.input}>
         <label htmlFor="preco">Novo preço do produto:</label>
         <input
           required
@@ -57,10 +63,13 @@ export function Home() {
           value={form.sales_price}
           onChange={handleChange}
         />
+        </div>
+        </div>
         <button type="submit" disabled={!camposPreenchidos}>
           Atualizar produto
         </button>
       </form>
+    </div>
     </div>
   );
 }
