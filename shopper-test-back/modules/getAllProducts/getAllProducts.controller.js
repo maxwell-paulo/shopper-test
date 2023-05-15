@@ -5,8 +5,9 @@ const getAllProductsController = {
         const service = getAllProductsService;
 
         const getAllProducts = await service.execute();
-
+console.log(getAllProducts)
         return res.json(getAllProducts);
+
     }
 }
 

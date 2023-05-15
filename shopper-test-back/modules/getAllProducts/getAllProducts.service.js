@@ -7,13 +7,6 @@ const getAllProductsService = {
 
             const products = await repository.getAllProducts();
 
-            if (products.length === 0) {
-                return {
-                    error: 'Nenhum produto encontrado',
-                    status: 404
-                };
-            }
-
             return products;
         } catch (err) {
             return {

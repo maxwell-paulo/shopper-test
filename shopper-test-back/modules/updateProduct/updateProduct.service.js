@@ -1,18 +1,16 @@
 import { productRepository } from "../../repository/product.repository.js";
+import { ApiError } from "../../utils/ApiError.js";
+import {HTTP_STATUS_CODES} from "../../utils/const.js";
 
 const updateProductService = {
     async execute(code, name, cost_price, sales_price) {
-        try {
             const repository = productRepository;
 
             const product = await repository.getOneProduct(code)
 
             // the new sales_price must be greater than the product cost_price.
             if (parseFloat(sales_price) <= parseFloat(product.cost_price)) {
-              return {
-                error: 'O preço de venda deve ser maior que o preço de custo.',
-                status: 404
-              };
+              throw new Error("Erro test", HTTP_STATUS_CODES.badRequest)
             }
 
 
@@ -39,12 +37,6 @@ const updateProductService = {
             }
 
             return updatedProduct;
-        } catch (err) {
-            return {
-                error: err.message,
-                status: 500
-            };
-        }
     }
 }
 
