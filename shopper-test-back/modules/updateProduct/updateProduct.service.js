@@ -15,7 +15,7 @@ const updateProductService = {
             }
 
 
-              // the new sales_price must be 10% greater or less than the current sales_price
+            // the new sales_price must be 10% greater or less than the current sales_price
             const newSalesPrice = parseFloat(sales_price);
             const currentSalesPrice = parseFloat(product.sales_price);
             const tenPercentIncrease = parseFloat((currentSalesPrice * 1.1).toFixed(2));
