@@ -29,14 +29,8 @@ const updateProductService = {
 
             // if the updated product is a pack and has only one product update the product price
               const packsByPackId = await packRepository.getPacksByPackId(code)
-              console.log(packsByPackId)
               if (packsByPackId.length == 1) {
-                console.log("caiu no if")
-                console.log(packsByPackId[0].product_id)
-                console.log((product.sales_price / packsByPackId.qty).toString())
-                console.log("caiu no if")
                 const packProduct = {code: packsByPackId[0].product_id.toString(), sales_price: (product.sales_price / packsByPackId[0].qty).toFixed(2).toString()}
-                console.log(packProduct)
                 products.push(packProduct)
               }
 
@@ -48,7 +42,6 @@ const updateProductService = {
 
             const updatedProducts = await Promise.all(productsUpdateRequests)
 
-             console.log(updatedProducts)
             return updatedProducts;
     }
 }
