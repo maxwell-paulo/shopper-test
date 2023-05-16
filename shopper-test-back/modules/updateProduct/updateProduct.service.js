@@ -22,7 +22,7 @@ const updateProductService = {
             const tenPercentDecrease = parseFloat((currentSalesPrice * 0.9).toFixed(2))
 
             if (newSalesPrice > tenPercentIncrease || newSalesPrice < tenPercentDecrease) {
-              throw new ApiError(`O preço de venda novo deve ser 10% maior ou menor que o preço de venda antigo que é de R$${product.sales_price}`, HTTP_STATUS_CODES.badRequest)
+              throw new ApiError(`O preço de venda novo deve ser até 10% maior ou menor que o preço de venda antigo que é de R$${product.sales_price}`, HTTP_STATUS_CODES.badRequest)
             }
 
             let products = [{code, sales_price}]
