@@ -25,17 +25,30 @@ const updateProductService = {
               throw new ApiError(`O preço de venda novo deve ser 10% maior ou menor que o preço de venda antigo que é de R$${product.sales_price}`, HTTP_STATUS_CODES.badRequest)
             }
 
-            //update Products sales_price
+            let products = [{code, sales_price}]
+
+            // if the updated product is a pack and has only one product update the product price
+              const packsByPackId = await packRepository.getPacksByPackId(code)
+              console.log(packsByPackId)
+              if (packsByPackId.length == 1) {
+                console.log("caiu no if")
+                console.log(packsByPackId[0].product_id)
+                console.log((product.sales_price / packsByPackId.qty).toString())
+                console.log("caiu no if")
+                const packProduct = {code: packsByPackId[0].product_id.toString(), sales_price: (product.sales_price / packsByPackId[0].qty).toFixed(2).toString()}
+                console.log(packProduct)
+                products.push(packProduct)
+              }
 
             // If the Product is in a pack, update the pack sales_price
-            const packs = await packRepository.getPacksByProductId(code)
-            const packsProducts = packs.map((pack) => ({code: pack.pack_id.toString(), sales_price: (pack.qty * sales_price).toString()}))
-            const products = [{code, sales_price}, ...packsProducts]
-            console.log(products)
-            const porductsUpdates = products.map((product) => productRepository.updateProduct(product.code, product.sales_price))
+            const packsByProductId = await packRepository.getPacksByProductId(code)
+            const packsProducts = packsByProductId.map((pack) => ({code: pack.pack_id.toString(), sales_price: (pack.qty * sales_price).toString()}))
+            products = [...products, ...packsProducts]
+            const productsUpdateRequests = products.map((product) => productRepository.updateProduct(product.code, product.sales_price))
 
-            const updatedProducts = await Promise.all(porductsUpdates)
+            const updatedProducts = await Promise.all(productsUpdateRequests)
 
+             console.log(updatedProducts)
             return updatedProducts;
     }
 }

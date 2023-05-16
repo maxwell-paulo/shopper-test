@@ -9,6 +9,14 @@ const packRepository = {
         return packs;
     },
 
+    getPacksByPackId: async (code) => {
+      const packs = await Pack.findAll({
+        where: {pack_id: code}
+      })
+
+      return packs;
+  },
+
 }
 
 export { packRepository };
